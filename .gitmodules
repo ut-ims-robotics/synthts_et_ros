@@ -1,0 +1,3 @@
+[submodule "synthts_et"]
+	path = synthts_et
+	url = https://github.com/ikiissel/synthts_et.git
