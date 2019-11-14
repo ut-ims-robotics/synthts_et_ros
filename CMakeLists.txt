@@ -117,6 +117,25 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/include
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib
+)
+
+file (GLOB CPP_FILES 
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/engine/*.c
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/etana/*.c
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/fsc/*.c
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/label/*.c
+
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/engine/*.cpp
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/etana/*.cpp
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/fsc/*.cpp
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/label/*.cpp
+
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/engine/*.h
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/etana/*.h
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/fsc/*.h
+  ${PROJECT_SOURCE_DIR}/synthts_et/synthts_et/lib/label/*.h
 )
 
 ## Declare a C++ library
@@ -211,3 +230,11 @@ add_dependencies(eestikeelne_lause test_generate_messages_cpp)
 add_executable(kuulaja src/kuulaja.cpp)
 target_link_libraries(kuulaja ${catkin_LIBRARIES})
 add_dependencies(kuulaja test_generate_messages_cpp)
+
+add_executable(tekst_heliks src/tekst_heliks.cpp
+  ${CPP_FILES}
+)
+target_link_libraries(tekst_heliks 
+  ${catkin_LIBRARIES}
+  dl
+)
