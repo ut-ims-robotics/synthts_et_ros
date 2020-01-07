@@ -8,6 +8,17 @@
 extern "C" {
 #include "HTS_engine.h"
 }
+#include "ros/ros.h"
+#include "std_msgs/String.h"
+#include <sound_play/sound_play.h>
+#include <unistd.h>
+
+#include <bits/stdc++.h> 
+#include <iostream> 
+#include <sys/stat.h> 
+#include <sys/types.h> 
+using namespace std; 
+
 
 CDisambiguator Disambiguator;
 CLinguistic Linguistic;
@@ -15,6 +26,7 @@ CLinguistic Linguistic;
 
 typedef unsigned char uchar;
 
+/*
 wchar_t *UTF8_to_WChar(const char *string) {
     long b = 0,
             c = 0;
@@ -56,11 +68,14 @@ void ReadUTF8Text(CFSWString &text, const char *fn) {
     fs.read(buf, i);
     fs.close();
     buf[i] = '\0';
-    wchar_t* w_temp = UTF8_to_WChar(buf);
+    char* sona = "tere";
+    wchar_t* w_temp = UTF8_to_WChar(sona);
     text = w_temp;
     delete [] buf;
     delete [] w_temp;
 }
+*/
+
 
 int PrintUsage() {
     fprintf(stderr,"\t-f 	[sisendtekst utf8-s] \n");
@@ -142,7 +157,16 @@ void samplerate(size_t &fr, size_t &fp, float &alpha, size_t br) {
             alpha = 0.55;
 }
 
+
+
 int main(int argc, char* argv[]) {
+    system("mkdir -p ~/.tekstHeliks");
+    ros::init(argc, argv, "tekst_heliks");
+    ros::NodeHandle n;
+    ros::AsyncSpinner spinner(1);
+    spinner.start();
+    sound_play::SoundClient sc;
+
     size_t num_voices;
     char **fn_voices;
     char* in_fname;
@@ -170,7 +194,7 @@ int main(int argc, char* argv[]) {
     FSCInit();
     fn_voices = (char **) malloc(argc * sizeof (char *));
     
-    if (argc < 11) {
+    if (argc < 9) {
         fprintf(stderr, "Viga: liiga vähe parameetreid\n\n");
         PrintUsage();
     }    
@@ -209,6 +233,7 @@ int main(int argc, char* argv[]) {
                 exit(0);
             }
         }
+        /*
         if (CFSAString("-f") == argv[i]) {
             if (i + 1 < argc) {
                 in_fname = argv[i + 1];
@@ -218,6 +243,7 @@ int main(int argc, char* argv[]) {
                 exit(0);
             }
         }
+        */
         if (CFSAString("-s") == argv[i]) {
             if (i + 1 < argc) {
                 samplerate(fr, fp, alpha, atoi(argv[i + 1]));
@@ -270,8 +296,13 @@ int main(int argc, char* argv[]) {
     Linguistic.Open(LexFileName);
     Disambiguator.Open(LexDFileName);
 
-    CFSWString text;
-    ReadUTF8Text(text, in_fname);
+    //CFSWString text;
+    std::string narrow_string("tervist");
+    std::wstring wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
+    const wchar_t* text = wide_string.c_str();
+    //char* sone = "tervist";
+    //text = UTF8_to_WChar(sone);
+    //ReadUTF8Text(text, in_fname);
     HTS_Engine_initialize(&engine);
 
     if (HTS_Engine_load(&engine, fn_voices, 1) != TRUE) {
@@ -300,7 +331,10 @@ int main(int argc, char* argv[]) {
     HTS_Engine_set_gv_weight(&engine, 0, gvw1);
     HTS_Engine_set_gv_weight(&engine, 1, gvw2);
 
+    //kui on kaks uut rida, asendab ühega, sidekriipsu tühikuga, asendab tähemärke, mida eesti keeles pole
+    //eemaldab lõpusulu, kui järgmine on lauset lõpetav märk
     text = DealWithText(text);
+    //Loob listi. Lisab sinna CFSWStringe lausete ja tabulaatorite kaupa, eemaldab lause lõpud
     CFSArray<CFSWString> res = do_utterances(text);
 
     INTPTR data_size = 0;
@@ -313,9 +347,25 @@ int main(int argc, char* argv[]) {
 
         std::vector<std::string> v;
         v = to_vector(label);
+        /*
+        for(int i = 0; i<label.GetSize(); i++) {
+            std::string res = "";
+            for (int j = 0; j < label[i].GetLength(); j++)
+            {
+                res += label[i].GetAt(j);
+            }
+            v.push_back(res);
+        }
+        */
 
         std::vector<char*> vc;
         fill_char_vector(v, vc);
+        /*
+        for(int i=0; i<v.size(); i++ ) {
+            vc.push_back((char *)v[i].c_str());
+            std::cout << v[i] << std::endl;
+        }
+        */
 
         size_t n_lines = vc.size();
 
@@ -325,7 +375,7 @@ int main(int argc, char* argv[]) {
             exit(1);
         }
 
-        clean_char_vector(vc);
+        //clean_char_vector(vc);
         data_size += HTS_Engine_engine_speech_size(&engine);
         if (write_durlabel) HTS_Engine_save_durlabel(&engine, durfp);
         HTS_Engine_save_generated_speech(&engine, outfp);
@@ -342,6 +392,11 @@ int main(int argc, char* argv[]) {
     Linguistic.Close();
 
     FSCTerminate();
+    sleep(1);
+    //printf(output_fname);
+    sc.playWave(output_fname);
+    sleep(3);
+    system( "rm -rf ~/.tekstHeliks" );
     return 0;
 
 }

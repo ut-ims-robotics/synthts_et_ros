@@ -32,7 +32,7 @@ int main(int argc, char **argv)
   while (ros::ok()) {
       if (uus_lause == true)
       {
-          sc.playWave("/home/academy/synthts_et/synthts_et/out_tnu.wav");
+          sc.playWave("/home/academy/synthts_et/out_tnu.wav");
           uus_lause = false;
       }
       
