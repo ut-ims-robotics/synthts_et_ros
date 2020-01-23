@@ -1,0 +1,53 @@
+#include <string>
+#include <vector>
+#include "etana/proof.h"
+extern "C" {
+#include "HTS_engine.h"
+}
+
+class KeeleTegemine
+{
+    public:
+    KeeleTegemine(
+        CFSAString lexFileName, CFSAString lexdFileName, char **fn_voices, char* output_fname, 
+        double speed, float ht, float gvw1, float gvw2,
+        bool print_label, bool print_utt, bool write_raw, bool write_durlabel
+        );
+    void PrintUsage();
+    static char *convert_vec(const std::string & s);
+    void fill_char_vector(std::vector<std::string>& v, std::vector<char*>& vc);
+    void clean_char_vector(std::vector<char*>& vc);
+    static std::string to_stdstring(CFSWString s);
+    static std::vector<std::string> to_vector(CFSArray<CFSWString> arr);
+    void cfileexists(const char * filename);
+    void samplerate(size_t &fr, size_t &fp, float &alpha, size_t br);
+    void init();
+    void lausu(std::string lause);
+
+    private:
+    char **fn_voices_;
+    char* output_fname_;
+    FILE * outfp_;
+    char* dur_fname_;
+    FILE * durfp_;
+    
+    bool print_label_;
+    bool print_utt_;
+    bool write_raw_;
+    bool write_durlabel_;
+
+    
+    CFSAString LexFileName_, LexDFileName_;
+    HTS_Engine engine_;
+
+    double speed_;
+    static const size_t fr_ = 48000;
+    static const size_t fp_ = 240;
+    static const float alpha_ = 0.55;
+    float ht_;
+    float gvw1_;
+    float gvw2_;
+
+    static const float beta_ = 0.0;
+    static const float th_ = 0.5;
+};
