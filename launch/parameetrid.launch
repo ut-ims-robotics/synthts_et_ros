@@ -5,6 +5,5 @@
   <node pkg="synthts_et_ros" type="tekst_heliks" name="tekst_heliks" output="screen">
     
   </node>
-  <rosparam file="$(find synthts_et_ros)/config/parameetrid.yaml" command="load" ns="tonu"/>
-  <rosparam file="$(find synthts_et_ros)/config/parameetrid.yaml" command="load" ns="eeva"/>
+  <rosparam file="$(find synthts_et_ros)/config/parameetrid.yaml" command="load"/>
 </launch>
