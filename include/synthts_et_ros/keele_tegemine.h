@@ -13,7 +13,6 @@ class KeeleTegemine
         double speed, float ht, float gvw1, float gvw2,
         bool print_label, bool print_utt, bool write_raw, bool write_durlabel
         );
-    void PrintUsage();
     static char *convert_vec(const std::string & s);
     void fill_char_vector(std::vector<std::string>& v, std::vector<char*>& vc);
     void clean_char_vector(std::vector<char*>& vc);
@@ -22,7 +21,7 @@ class KeeleTegemine
     void cfileexists(const char * filename);
     void samplerate(size_t &fr, size_t &fp, float &alpha, size_t br);
     void init();
-    void lausu(std::string lause);
+    void genereeri_lause(std::string lause);
 
     private:
     char **fn_voices_;

@@ -5,15 +5,13 @@ extern "C" {
 #include "synthts_et_ros/keele_tegemine.h"
 using namespace std; 
 
-CDisambiguator Disambiguator;
-CLinguistic Linguistic;
-
 int main(int argc, char* argv[]) {
 
     string lex_file_name;
     string lexd_file_name;
     string voice_filename;
     std::string output_file_name;
+    std::string dur_file_name;
     double speed;
     float half_tone;
     float gv_weight1;
@@ -49,6 +47,10 @@ int main(int argc, char* argv[]) {
     char *output = &output_file_name[0];
     std::cout << output << std::endl;
 
+    n.getParam("/dur_fname", dur_file_name);
+    char *dur_fname = &dur_file_name[0];
+    std::cout << dur_fname << std::endl;
+
     n.getParam("/speed", speed);
     std::cout << speed << std::endl;
 
@@ -80,14 +82,14 @@ int main(int argc, char* argv[]) {
         );
 
     kt.init();
-    kt.lausu("tervist");
+    kt.genereeri_lause("tervist");
 
     sleep(1);
     sc.playWave(output);
     sleep(3);
     system( "rm -rf ~/.tekstHeliks" );
 
-    // TODO >>>
+    // TODO >>> no memory leak
     delete[] voices_fn_helper;
 
     return 0;

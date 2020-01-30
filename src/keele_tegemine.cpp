@@ -4,6 +4,8 @@
 
 #include "ros/ros.h"
 
+CDisambiguator Disambiguator;
+CLinguistic Linguistic;
 
 KeeleTegemine::KeeleTegemine(
     CFSAString lexFileName, CFSAString lexdFileName, char **fn_voices, char* output_fname,
@@ -23,28 +25,6 @@ KeeleTegemine::KeeleTegemine(
     write_raw_ = write_raw;
     write_durlabel_ = write_durlabel;
 };
-
-void KeeleTegemine::PrintUsage() {
-    fprintf(stderr,"\t-f 	[sisendtekst utf8-s] \n");
-    fprintf(stderr,"\t-o 	[väljund-wav]  \n");
-    fprintf(stderr,"\t-lex 	[analüüsi sõnastik]  \n");
-    fprintf(stderr,"\t-lexd	[ühestaja sõnastik]  \n");
-    fprintf(stderr,"\t-m 	[hääle nimi, vt kataloogi htsvoices/] \n");
-    fprintf(stderr,"\t-r 	[kõnetempo, double, 0.01-2.76] \n");
-    fprintf(stderr,"\t-ht 	[float]\n");
-    fprintf(stderr,"\t-gvw1 	[float]\n");
-    fprintf(stderr,"\t-gvw2 	[float]\n");
-    fprintf(stderr,"\t-utt 	[prindi lausung]\n");
-    fprintf(stderr,"\t-debug 	[prindi labeli struktuur]\n");
-    fprintf(stderr,"\t-raw 	[väljund-raw]\n");
-    fprintf(stderr,"\t-dur 	[foneemid koos kestustega, failinimi]\n");
-    fprintf(stderr,"\n\tnäide: \n");
-    fprintf(stderr,"\t\tbin/synthts_et -lex dct/et.dct -lexd dct/et3.dct \\ \n");
-    fprintf(stderr,"\t\t-o out_tnu.wav -f in.txt -m htsvoices/eki_et_tnu.htsvoice \\\n");
-    fprintf(stderr,"\t\t-r 1.1\n");
-        
-    //exit(0);
-}
 
 char *KeeleTegemine::convert_vec(const std::string & s) {
     char *pc = new char[s.size() + 1];
@@ -131,75 +111,9 @@ void KeeleTegemine::init() {
 
     HTS_Engine_set_gv_weight(&engine_, 0, gvw1_);
     HTS_Engine_set_gv_weight(&engine_, 1, gvw2_);
-
-    /*
-    std::string narrow_string("tervist");
-    std::wstring wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
-    const wchar_t* text = wide_string.c_str();
-    text = DealWithText(text);
-    CFSArray<CFSWString> res = do_utterances(text);
-
-    INTPTR data_size = 0;
-    outfp_ = fopen(output_fname_, "wb");
-    if (write_durlabel_) durfp_ = fopen(dur_fname_, "w");
-    if (!write_raw_) HTS_Engine_write_header(&engine_, outfp_, 1);
-
-
-    for (INTPTR i = 0; i < res.GetSize(); i++) {
-        CFSArray<CFSWString> label = do_all(res[i], print_label_, print_utt_);
-
-        std::vector<std::string> v;
-        v = to_vector(label);
-        /*
-        for(int i = 0; i<label.GetSize(); i++) {
-            std::string res = "";
-            for (int j = 0; j < label[i].GetLength(); j++)
-            {
-                res += label[i].GetAt(j);
-            }
-            v.push_back(res);
-        }
-        */
-       /*
-        std::vector<char*> vc;
-        fill_char_vector(v, vc);
-        /*
-        for(int i=0; i<v.size(); i++ ) {
-            vc.push_back((char *)v[i].c_str());
-            std::cout << v[i] << std::endl;
-        }
-        */
-       /*
-        size_t n_lines = vc.size();
-
-        if (HTS_Engine_synthesize_from_strings(&engine_, &vc[0], n_lines) != TRUE) {
-            fprintf(stderr, "Viga: süntees ebaonnestus.\n");            
-            HTS_Engine_clear(&engine_);
-            exit(1);
-        }
-
-        //clean_char_vector(vc);
-        data_size += HTS_Engine_engine_speech_size(&engine_);
-        if (write_durlabel_) HTS_Engine_save_durlabel(&engine_, durfp_);
-        HTS_Engine_save_generated_speech(&engine_, outfp_);
-
-        HTS_Engine_refresh(&engine_);
-
-    } //synth loop
-
-    if (!write_raw_) HTS_Engine_write_header(&engine_, outfp_, 0);
-    if (write_durlabel_) fclose(durfp_);
-    fclose(outfp_);
-
-    HTS_Engine_clear(&engine_);
-    Linguistic.Close();
-
-    FSCTerminate();
-    */
 }
 
-void KeeleTegemine::lausu(std::string lause) {
-    //std::string narrow_string("tervist");
+void KeeleTegemine::genereeri_lause(std::string lause) {
     std::string narrow_string(lause);
     std::wstring wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
     const wchar_t* text = wide_string.c_str();
@@ -217,25 +131,9 @@ void KeeleTegemine::lausu(std::string lause) {
 
         std::vector<std::string> v;
         v = to_vector(label);
-        /*
-        for(int i = 0; i<label.GetSize(); i++) {
-            std::string res = "";
-            for (int j = 0; j < label[i].GetLength(); j++)
-            {
-                res += label[i].GetAt(j);
-            }
-            v.push_back(res);
-        }
-        */
-
+        
         std::vector<char*> vc;
         fill_char_vector(v, vc);
-        /*
-        for(int i=0; i<v.size(); i++ ) {
-            vc.push_back((char *)v[i].c_str());
-            std::cout << v[i] << std::endl;
-        }
-        */
 
         size_t n_lines = vc.size();
 
@@ -245,7 +143,6 @@ void KeeleTegemine::lausu(std::string lause) {
             exit(1);
         }
 
-        //clean_char_vector(vc);
         data_size += HTS_Engine_engine_speech_size(&engine_);
         if (write_durlabel_) HTS_Engine_save_durlabel(&engine_, durfp_);
         HTS_Engine_save_generated_speech(&engine_, outfp_);
