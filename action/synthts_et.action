@@ -1,0 +1,8 @@
+#goal definition
+string fraas
+---
+#result definition
+bool edukas
+---
+# feedback
+float32 progress

@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   message_generation
+  actionlib_msgs
+  actionlib
 )
 
 ## System dependencies are found with CMake's conventions
@@ -60,15 +62,18 @@ add_service_files(
 )
 
 ## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
+add_action_files(
+  DIRECTORY action
+  FILES
+  synthts_et.action
 #   Action1.action
 #   Action2.action
-# )
+)
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
+  actionlib_msgs
   std_msgs
 )
 
@@ -104,7 +109,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES test
-   CATKIN_DEPENDS message_runtime roscpp rospy std_msgs
+   CATKIN_DEPENDS message_runtime roscpp rospy std_msgs actionlib_msgs
 #  DEPENDS system_lib
 )
 
@@ -243,6 +248,7 @@ add_executable(tekst_heliks
   src/keele_tegemine.cpp
   ${CPP_FILES}
 )
+add_dependencies(tekst_heliks ${synthts_et_ros_EXPORTED_TARGETS})
 target_link_libraries(tekst_heliks 
   ${catkin_LIBRARIES}
   dl

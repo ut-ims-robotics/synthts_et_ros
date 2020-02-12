@@ -3,7 +3,52 @@ extern "C" {
 }
 #include <sound_play/sound_play.h>
 #include "synthts_et_ros/keele_tegemine.h"
+#include "synthts_et_ros/tekst_heliks.h"
 using namespace std; 
+
+#include <ros/ros.h>
+#include <actionlib/server/simple_action_server.h>
+#include <synthts_et_ros/synthts_etAction.h>
+
+
+class synthts_etAction
+{
+protected:
+
+  ros::NodeHandle nh_;
+  actionlib::SimpleActionServer<synthts_et_ros::synthts_etAction> as_; // NodeHandle instance must be created before this line. Otherwise strange error occurs.
+  std::string action_name_;
+  // create messages that are used to published feedback/result
+  synthts_et_ros::synthts_etFeedback feedback_;
+  synthts_et_ros::synthts_etResult result_;
+
+public:
+
+  synthts_etAction(std::string name) :
+    as_(nh_, name, boost::bind(&synthts_etAction::executeCB, this, _1), false),
+    action_name_(name)
+  {
+    as_.start();
+
+  }
+
+  void executeCB(const synthts_et_ros::synthts_etGoalConstPtr &goal)
+  {
+    // helper variables
+    ros::Rate r(1);
+    bool success = true;
+
+    if(success)
+    {
+      result_.edukas = true;
+      ROS_INFO("%s: Succeeded", action_name_.c_str());
+      // set the action state to succeeded
+      as_.setSucceeded(result_);
+    }
+  }
+
+
+};
 
 int main(int argc, char* argv[]) {
 
@@ -23,6 +68,7 @@ int main(int argc, char* argv[]) {
 
     system("mkdir -p ~/.tekstHeliks");
     ros::init(argc, argv, "tekst_heliks");
+    synthts_etAction synthts_et("tekst_heliks");
     ros::NodeHandle n;
     ros::AsyncSpinner spinner(1);
     spinner.start();
@@ -82,6 +128,7 @@ int main(int argc, char* argv[]) {
         );
 
     kt.init();
+
     kt.genereeri_lause("tervist");
 
     sleep(1);
