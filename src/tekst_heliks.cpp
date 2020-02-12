@@ -11,47 +11,93 @@ using namespace std;
 #include <synthts_et_ros/synthts_etAction.h>
 
 
-class synthts_etAction
+TekstHeliks::TekstHeliks(std::string name) :
+  as_(nh_, name, boost::bind(&TekstHeliks::executeCB, this, _1), false),
+  action_name_(name)
 {
-protected:
+  as_.start();
+  getParams();
+  KeeleTegemine kt(
+        lexFileName_, lexDFileName_, fn_voices_, output_fname_, 
+        speed_, half_tone_, gv_weight1_, gv_weight2_,
+        print_label_, print_utterance_, write_raw_, write_durlabel_
+        );
+  kt.init();
+  kt.genereeri_lause("tervist");
 
-  ros::NodeHandle nh_;
-  actionlib::SimpleActionServer<synthts_et_ros::synthts_etAction> as_; // NodeHandle instance must be created before this line. Otherwise strange error occurs.
-  std::string action_name_;
-  // create messages that are used to published feedback/result
-  synthts_et_ros::synthts_etFeedback feedback_;
-  synthts_et_ros::synthts_etResult result_;
+  sleep(1);
+  sc_.playWave(output_fname_);
+  sleep(3);
+}
 
-public:
+void TekstHeliks::executeCB(const synthts_et_ros::synthts_etGoalConstPtr &goal)
+{
+  // helper variables
+  ros::Rate r(1);
+  bool success = true;
 
-  synthts_etAction(std::string name) :
-    as_(nh_, name, boost::bind(&synthts_etAction::executeCB, this, _1), false),
-    action_name_(name)
+  if(success)
   {
-    as_.start();
-
+    result_.edukas = true;
+    ROS_INFO("%s: Succeeded", action_name_.c_str());
+    // set the action state to succeeded
+    as_.setSucceeded(result_);
   }
+}
 
-  void executeCB(const synthts_et_ros::synthts_etGoalConstPtr &goal)
-  {
-    // helper variables
-    ros::Rate r(1);
-    bool success = true;
+void TekstHeliks::getParams()
+{
+  nh_.getParam("/lex_file_name", lex_file_name_);
+  lexFileName_ = lex_file_name_.c_str();
+  std::cout << lexFileName_ << std::endl;
 
-    if(success)
-    {
-      result_.edukas = true;
-      ROS_INFO("%s: Succeeded", action_name_.c_str());
-      // set the action state to succeeded
-      as_.setSucceeded(result_);
-    }
-  }
+  nh_.getParam("/lexd_file_name", lexd_file_name_);
+  lexDFileName_ = lexd_file_name_.c_str();
+  std::cout << lexDFileName_ << std::endl;
 
+  nh_.getParam("/fn_voices", voice_filename_);
+  char *voices_fn_helper = new char[voice_filename_.size()+1];
+  fn_voices_ = (char **) new char[voice_filename_.size()+1];
+  std::strcpy(voices_fn_helper, voice_filename_.c_str());
+  fn_voices_[0] = voices_fn_helper;
+  std::cout << fn_voices_ << std::endl;
 
-};
+  nh_.getParam("/output_fname", output_file_name_);
+  output_fname_ = &output_file_name_[0];
+  std::cout << output_fname_ << std::endl;
+
+  nh_.getParam("/dur_fname", dur_file_name_);
+  dur_fname_ = &dur_file_name_[0];
+  std::cout << dur_fname_ << std::endl;
+
+  nh_.getParam("/speed", speed_);
+  std::cout << speed_ << std::endl;
+
+  nh_.getParam("/half_tone", half_tone_);
+  std::cout << half_tone_ << std::endl;
+
+  nh_.getParam("/gv_weight1", gv_weight1_);
+  std::cout << gv_weight1_ << std::endl;
+
+  nh_.getParam("/gv_weight2", gv_weight2_);
+  std::cout << gv_weight2_ << std::endl;
+
+  nh_.getParam("/print_label", print_label_);
+  std::cout << print_label_ << std::endl;
+
+  nh_.getParam("/print_utt", print_utterance_);
+  std::cout << print_utterance_ << std::endl;
+
+  nh_.getParam("/write_raw", write_raw_);
+  std::cout << write_raw_ << std::endl;
+
+  nh_.getParam("/write_durlabel", write_durlabel_);
+  std::cout << write_durlabel_ << std::endl;
+}
 
 int main(int argc, char* argv[]) {
 
+  /*
     string lex_file_name;
     string lexd_file_name;
     string voice_filename;
@@ -65,15 +111,17 @@ int main(int argc, char* argv[]) {
     bool print_utterance;
     bool write_raw;
     bool write_durlabel;
+    */
 
     system("mkdir -p ~/.tekstHeliks");
     ros::init(argc, argv, "tekst_heliks");
-    synthts_etAction synthts_et("tekst_heliks");
-    ros::NodeHandle n;
+    TekstHeliks synthts_et("tekst_heliks");
+    //ros::NodeHandle n;
     ros::AsyncSpinner spinner(1);
     spinner.start();
-    sound_play::SoundClient sc;
+    //sound_play::SoundClient sc;
 
+  /*
     n.getParam("/lex_file_name", lex_file_name);
     CFSAString lexFileName = lex_file_name.c_str();
     std::cout << lexFileName << std::endl;
@@ -134,10 +182,11 @@ int main(int argc, char* argv[]) {
     sleep(1);
     sc.playWave(output);
     sleep(3);
+    */
     system( "rm -rf ~/.tekstHeliks" );
 
     // TODO >>> no memory leak
-    delete[] voices_fn_helper;
+    //delete[] voices_fn_helper;
 
     return 0;
 }
