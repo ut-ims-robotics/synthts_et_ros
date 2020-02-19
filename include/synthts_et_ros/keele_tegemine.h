@@ -9,7 +9,7 @@ class KeeleTegemine
 {
     public:
     KeeleTegemine(
-        CFSAString lexFileName, CFSAString lexdFileName, char **fn_voices, char* output_fname, 
+        CFSAString lexFileName, CFSAString lexdFileName, char **fn_voices, char* output_fname, char* dur_fname_,
         double speed, float ht, float gvw1, float gvw2,
         bool print_label, bool print_utt, bool write_raw, bool write_durlabel
         );

@@ -65,7 +65,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_action_files(
   DIRECTORY action
   FILES
-  synthts_et.action
+  lausu_fraas.action
 #   Action1.action
 #   Action2.action
 )

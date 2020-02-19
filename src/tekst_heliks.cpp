@@ -18,12 +18,12 @@ TekstHeliks::TekstHeliks(std::string name) :
   as_.start();
   getParams();
   KeeleTegemine kt(
-        lexFileName_, lexDFileName_, fn_voices_, output_fname_, 
+        lexFileName_, lexDFileName_, fn_voices_, output_fname_, dur_fname_,
         speed_, half_tone_, gv_weight1_, gv_weight2_,
         print_label_, print_utterance_, write_raw_, write_durlabel_
         );
   kt.init();
-  kt.genereeri_lause("tervist");
+  kt.genereeri_lause("tere õhtust");
 
   sleep(1);
   sc_.playWave(output_fname_);
