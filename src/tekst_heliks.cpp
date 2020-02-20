@@ -114,11 +114,15 @@ TekstHeliks::TekstHeliks(std::string name) :
 
 void TekstHeliks::executeCB(const synthts_et_ros::lausu_fraasGoalConstPtr &goal)
 {
+  ROS_INFO("Callback is called");
   // helper variables
   //ros::Rate r(1);
   bool success = true;
 
+//TODO: add boolean control?
   kt_.genereeri_lause(goal->fraas);
+
+  ROS_INFO("Wav file is generated");
 
   sleep(1);
   sc_.playWave(output_fname_);
@@ -191,11 +195,11 @@ int main(int argc, char* argv[]) {
     spinner.start();
     TekstHeliks lausu_fraas("tekst_heliks");
 
-    system( "rm -rf ~/.tekstHeliks" );
-
     while(ros::ok()) {
 
     }
+
+    system( "rm -rf ~/.tekstHeliks" );
 
     return 0;
 }

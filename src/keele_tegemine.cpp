@@ -116,6 +116,7 @@ void KeeleTegemine::init() {
 }
 
 bool KeeleTegemine::genereeri_lause(std::string lause) {
+    ROS_INFO("Genereeri lause is called");
     std::string narrow_string(lause);
     std::wstring wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
     const wchar_t* text = wide_string.c_str();
@@ -127,17 +128,22 @@ bool KeeleTegemine::genereeri_lause(std::string lause) {
     if (write_durlabel_) durfp_ = fopen(dur_fname_, "w");
     if (!write_raw_) HTS_Engine_write_header(&engine_, outfp_, 1);
 
-
+    ROS_INFO("Starting to create wav file");
     for (INTPTR i = 0; i < res.GetSize(); i++) {
+        ROS_INFO("in loop");
         CFSArray<CFSWString> label = do_all(res[i], print_label_, print_utt_);
+        ROS_INFO("1");
 
         std::vector<std::string> v;
         v = to_vector(label);
+        ROS_INFO("2");
         
         std::vector<char*> vc;
         fill_char_vector(v, vc);
+        ROS_INFO("3");
 
         size_t n_lines = vc.size();
+        ROS_INFO("4");
 
         if (HTS_Engine_synthesize_from_strings(&engine_, &vc[0], n_lines) != TRUE) {
             fprintf(stderr, "Viga: süntees ebaonnestus.\n");            
@@ -152,6 +158,7 @@ bool KeeleTegemine::genereeri_lause(std::string lause) {
         HTS_Engine_refresh(&engine_);
 
     } //synth loop
+    ROS_INFO("Synth loop is finished");
 
     if (!write_raw_) HTS_Engine_write_header(&engine_, outfp_, 0);
     if (write_durlabel_) fclose(durfp_);
