@@ -7,7 +7,9 @@
 CDisambiguator Disambiguator;
 CLinguistic Linguistic;
 
-KeeleTegemine::KeeleTegemine(
+KeeleTegemine::KeeleTegemine() {};
+
+void KeeleTegemine::set_params(
     CFSAString lexFileName, CFSAString lexdFileName, char **fn_voices, char* output_fname, char* dur_fname_,
     double speed, float ht, float gvw1, float gvw2,
     bool print_label, bool print_utt, bool write_raw, bool write_durlabel)
@@ -24,7 +26,7 @@ KeeleTegemine::KeeleTegemine(
     print_utt_ = print_utt;
     write_raw_ = write_raw;
     write_durlabel_ = write_durlabel;
-};
+}
 
 char *KeeleTegemine::convert_vec(const std::string & s) {
     char *pc = new char[s.size() + 1];
@@ -113,7 +115,7 @@ void KeeleTegemine::init() {
     HTS_Engine_set_gv_weight(&engine_, 1, gvw2_);
 }
 
-void KeeleTegemine::genereeri_lause(std::string lause) {
+bool KeeleTegemine::genereeri_lause(std::string lause) {
     std::string narrow_string(lause);
     std::wstring wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
     const wchar_t* text = wide_string.c_str();
@@ -140,7 +142,7 @@ void KeeleTegemine::genereeri_lause(std::string lause) {
         if (HTS_Engine_synthesize_from_strings(&engine_, &vc[0], n_lines) != TRUE) {
             fprintf(stderr, "Viga: süntees ebaonnestus.\n");            
             HTS_Engine_clear(&engine_);
-            exit(1);
+            return false;
         }
 
         data_size += HTS_Engine_engine_speech_size(&engine_);
@@ -159,4 +161,5 @@ void KeeleTegemine::genereeri_lause(std::string lause) {
     Linguistic.Close();
 
     FSCTerminate();
+    return true;
 }

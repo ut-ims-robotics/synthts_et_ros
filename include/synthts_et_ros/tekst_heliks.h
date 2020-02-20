@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
-#include <synthts_et_ros/synthts_etAction.h>
+#include <synthts_et_ros/lausu_fraasAction.h>
 
 #include <sound_play/sound_play.h>
 using namespace std; 
@@ -9,11 +9,11 @@ class TekstHeliks
 {
     public:
     ros::NodeHandle nh_;
-    actionlib::SimpleActionServer<synthts_et_ros::synthts_etAction> as_; // NodeHandle instance must be created before this line. Otherwise strange error occurs.
+    actionlib::SimpleActionServer<synthts_et_ros::lausu_fraasAction> as_; // NodeHandle instance must be created before this line. Otherwise strange error occurs.
     std::string action_name_;
     // create messages that are used to published feedback/result
-    synthts_et_ros::synthts_etFeedback feedback_;
-    synthts_et_ros::synthts_etResult result_;
+    synthts_et_ros::lausu_fraasFeedback feedback_;
+    synthts_et_ros::lausu_fraasResult result_;
     char *voices_fn_helper;
     string lex_file_name_;
     string lexd_file_name_;
@@ -33,10 +33,11 @@ class TekstHeliks
     bool print_utterance_;
     bool write_raw_;
     bool write_durlabel_;
+    KeeleTegemine kt_;
 
     sound_play::SoundClient sc_;
 
     TekstHeliks(std::string name);
-    void executeCB(const synthts_et_ros::synthts_etGoalConstPtr &goal);
+    void executeCB(const synthts_et_ros::lausu_fraasGoalConstPtr &goal);
     void getParams();
 };

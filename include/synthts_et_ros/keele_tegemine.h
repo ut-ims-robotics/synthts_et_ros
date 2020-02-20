@@ -8,11 +8,7 @@ extern "C" {
 class KeeleTegemine
 {
     public:
-    KeeleTegemine(
-        CFSAString lexFileName, CFSAString lexdFileName, char **fn_voices, char* output_fname, char* dur_fname_,
-        double speed, float ht, float gvw1, float gvw2,
-        bool print_label, bool print_utt, bool write_raw, bool write_durlabel
-        );
+    KeeleTegemine();
     static char *convert_vec(const std::string & s);
     void fill_char_vector(std::vector<std::string>& v, std::vector<char*>& vc);
     void clean_char_vector(std::vector<char*>& vc);
@@ -21,7 +17,12 @@ class KeeleTegemine
     void cfileexists(const char * filename);
     void samplerate(size_t &fr, size_t &fp, float &alpha, size_t br);
     void init();
-    void genereeri_lause(std::string lause);
+    bool genereeri_lause(std::string lause);
+    void set_params(
+        CFSAString lexFileName, CFSAString lexdFileName, char **fn_voices, char* output_fname, char* dur_fname_,
+        double speed, float ht, float gvw1, float gvw2,
+        bool print_label, bool print_utt, bool write_raw, bool write_durlabel
+    );
 
     private:
     char **fn_voices_;
