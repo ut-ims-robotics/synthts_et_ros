@@ -69,7 +69,7 @@ TekstHeliks::TekstHeliks(std::string name) :
         ROS_INFO("set params done");
   kt_.init();
   ROS_INFO("init done");
-  //kt_.genereeri_lause("Dabbing on the haters");
+  //kt_.genereeri_lause("Tere");
 
 /*
   struct header header;
@@ -199,11 +199,7 @@ int main(int argc, char* argv[]) {
 
     }
 
-    //HTS_Engine_clear(&KeeleTegemine::engine_);
-    //Linguistic.Close();
-
-    //FSCTerminate();
-
+    lausu_fraas.kt_.shutdown();
     system( "rm -rf ~/.tekstHeliks" );
 
     return 0;

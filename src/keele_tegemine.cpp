@@ -172,3 +172,9 @@ bool KeeleTegemine::genereeri_lause(std::string lause) {
     */
     return true;
 }
+
+void KeeleTegemine::shutdown() {
+    HTS_Engine_clear(&engine_);
+    Linguistic.Close();
+    FSCTerminate();
+}
