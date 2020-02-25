@@ -23,6 +23,7 @@ class KeeleTegemine
         double speed, float ht, float gvw1, float gvw2,
         bool print_label, bool print_utt, bool write_raw, bool write_durlabel
     );
+    HTS_Engine engine_;
 
     private:
     char **fn_voices_;
@@ -38,7 +39,6 @@ class KeeleTegemine
 
     
     CFSAString LexFileName_, LexDFileName_;
-    HTS_Engine engine_;
 
     double speed_;
     static const size_t fr_ = 48000;

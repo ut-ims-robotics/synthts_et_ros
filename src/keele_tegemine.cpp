@@ -164,9 +164,11 @@ bool KeeleTegemine::genereeri_lause(std::string lause) {
     if (write_durlabel_) fclose(durfp_);
     fclose(outfp_);
 
+/*
     HTS_Engine_clear(&engine_);
     Linguistic.Close();
 
     FSCTerminate();
+    */
     return true;
 }
