@@ -132,18 +132,14 @@ bool KeeleTegemine::genereeri_lause(std::string lause) {
     for (INTPTR i = 0; i < res.GetSize(); i++) {
         ROS_INFO("in loop");
         CFSArray<CFSWString> label = do_all(res[i], print_label_, print_utt_);
-        ROS_INFO("1");
 
         std::vector<std::string> v;
         v = to_vector(label);
-        ROS_INFO("2");
         
         std::vector<char*> vc;
         fill_char_vector(v, vc);
-        ROS_INFO("3");
 
         size_t n_lines = vc.size();
-        ROS_INFO("4");
 
         if (HTS_Engine_synthesize_from_strings(&engine_, &vc[0], n_lines) != TRUE) {
             fprintf(stderr, "Viga: süntees ebaonnestus.\n");            
@@ -160,16 +156,14 @@ bool KeeleTegemine::genereeri_lause(std::string lause) {
     } //synth loop
     ROS_INFO("Synth loop is finished");
 
+    //std::cout << data_size << std::endl;
+    //std::cout << engine_.condition.sampling_frequency * sizeof(short) << std::endl;
+    //std::cout << ceil(data_size / (engine_.condition.sampling_frequency * sizeof(short) *1.0)) << std::endl;
+
     if (!write_raw_) HTS_Engine_write_header(&engine_, outfp_, 0);
     if (write_durlabel_) fclose(durfp_);
     fclose(outfp_);
 
-/*
-    HTS_Engine_clear(&engine_);
-    Linguistic.Close();
-
-    FSCTerminate();
-    */
     return true;
 }
 

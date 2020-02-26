@@ -69,7 +69,6 @@ TekstHeliks::TekstHeliks(std::string name) :
         ROS_INFO("set params done");
   kt_.init();
   ROS_INFO("init done");
-  //kt_.genereeri_lause("Tere");
 
 /*
   struct header header;
@@ -106,10 +105,6 @@ TekstHeliks::TekstHeliks(std::string name) :
   cout << "FMT:" << wavHeader.fmt[0] << wavHeader.fmt[1] << wavHeader.fmt[2] << wavHeader.fmt[3] << endl;
   cout << "Number of bytes per second :" << wavHeader.bytesPerSec << endl;
   */
-
-  //sleep(1);
-  //sc_.playWave(output_fname_);
-  //sleep(3);
 }
 
 void TekstHeliks::executeCB(const synthts_et_ros::lausu_fraasGoalConstPtr &goal)
@@ -117,16 +112,42 @@ void TekstHeliks::executeCB(const synthts_et_ros::lausu_fraasGoalConstPtr &goal)
   ROS_INFO("Callback is called");
   // helper variables
   //ros::Rate r(1);
-  bool success = true;
+  bool success = false;
 
-//TODO: add boolean control?
-  kt_.genereeri_lause(goal->fraas);
+  success = kt_.genereeri_lause(goal->fraas);
 
   ROS_INFO("Wav file is generated");
 
-  sleep(1);
+  //get file length
+  FILE *wavFile;
+  int headerSize = sizeof(wav_hdr),filelength = 0;
+  wavFile = fopen(output_fname_ , "r" );
+  filelength = getFileSize(wavFile);
+  fclose(wavFile);
+  int file_duration = ceil(filelength / (kt_.engine_.condition.sampling_frequency * sizeof(short) *1.0));
+  feedback_.progress = file_duration;
+  as_.publishFeedback(feedback_);
+
   sc_.playWave(output_fname_);
-  sleep(3);
+  double done = 0;
+
+  for (int i = 0; i < file_duration; i++)
+  {
+    if (as_.isPreemptRequested() || !ros::ok())
+      {
+        ROS_INFO("%s: Preempted", action_name_.c_str());
+        // set the action state to preempted
+        as_.setPreempted();
+        success = false;
+        break;
+      }
+    done += 1/(file_duration*1.0);
+    feedback_.progress = done;
+    as_.publishFeedback(feedback_);
+    sleep(1);
+  }
+  
+  //sleep(file_duration);
 
   if(success)
   {
@@ -135,6 +156,7 @@ void TekstHeliks::executeCB(const synthts_et_ros::lausu_fraasGoalConstPtr &goal)
     // set the action state to succeeded
     as_.setSucceeded(result_);
   }
+  //is if(!success) also needed
 }
 
 void TekstHeliks::getParams()
