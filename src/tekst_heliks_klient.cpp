@@ -18,7 +18,7 @@ int main (int argc, char **argv)
   ROS_INFO("Action server started, sending goal.");
   // send a goal to the action
   synthts_et_ros::lausu_fraasGoal goal;
-  goal.fraas = "Marssal Mannerheimi ratsamonument";
+  goal.fraas = "Seda miks mälestusmärk pidi olema just ratsamonument põhjendati ühest küljest asjaoluga et Mannerheim oli ratsaväelane tervist";
   ac.sendGoal(goal);
 
   //wait for the action to return
