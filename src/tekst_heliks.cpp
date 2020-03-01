@@ -10,23 +10,6 @@ using namespace std;
 #include <actionlib/server/simple_action_server.h>
 #include <synthts_et_ros/lausu_fraasAction.h>
 
-// WAVE file header format
-struct header {
-	uint8_t riff[4];						// RIFF string
-	unsigned int overall_size	;				// overall size of file in bytes
-	unsigned char wave[4];						// WAVE string
-	unsigned char fmt_chunk_marker[4];			// fmt string with trailing null char
-	unsigned int length_of_fmt;					// length of the format data
-	unsigned int format_type;					// format type. 1-PCM, 3- IEEE float, 6 - 8bit A law, 7 - 8bit mu law
-	unsigned int channels;						// no.of channels
-	unsigned int sample_rate;					// sampling rate (blocks per second)
-	unsigned int byterate;						// SampleRate * NumChannels * BitsPerSample/8
-	unsigned int block_align;					// NumChannels * BitsPerSample/8
-	unsigned int bits_per_sample;				// bits per sample, 8- 8bits, 16- 16 bits etc
-	unsigned char data_chunk_header [4];		// DATA string or FLLR string
-	unsigned int data_size;						// NumSamples * NumChannels * BitsPerSample/8 - size of the next chunk that will be read
-};
-
 typedef struct  WAV_HEADER{
     char                RIFF[4];        // RIFF Header      Magic header
     unsigned long       ChunkSize;      // RIFF Chunk Size  
@@ -69,42 +52,6 @@ TekstHeliks::TekstHeliks(std::string name) :
         ROS_INFO("set params done");
   kt_.init();
   ROS_INFO("init done");
-
-/*
-  struct header header;
-  FILE *ptr;
-  int read = 0;
-  unsigned char buffer4[4];
-
-  ptr = fopen(output_fname_, "rb");
-
-  read = fread(header.riff, sizeof(header.riff), 1, ptr);
-  printf("(1-4): %s \n", header.riff);
-
-  read = fread(buffer4, sizeof(buffer4), 1, ptr);
-  printf("%u %u %u %u\n", buffer4[0], buffer4[1], buffer4[2], buffer4[3]);
-
-  header.overall_size  = buffer4[0] | (buffer4[1]<<8) | (buffer4[2]<<16) | (buffer4[3]<<24);
-  printf("(5-8) Overall size: bytes:%u, Kb:%u \n", header.overall_size, header.overall_size/1024);
-
-  fclose(ptr);
-  */
- /*
-  wav_hdr wavHeader;
-  FILE *wavFile;
-  int headerSize = sizeof(wav_hdr),filelength = 0;
-  wavFile = fopen(output_fname_ , "r" );
-  fread(&wavHeader,headerSize,1,wavFile);
-  filelength = getFileSize(wavFile);
-  fclose(wavFile);
-
-  cout << "File is:" << filelength << " bytes." << endl;
-  cout << "Data size:" << wavHeader.ChunkSize << endl;
-  cout << "RIFF header:" << wavHeader.RIFF[0] << wavHeader.RIFF[1] << wavHeader.RIFF[2] << wavHeader.RIFF[3] << endl;
-  cout << "WAVE header:" << wavHeader.WAVE[0] << wavHeader.WAVE[1] << wavHeader.WAVE[2] << wavHeader.WAVE[3] << endl;
-  cout << "FMT:" << wavHeader.fmt[0] << wavHeader.fmt[1] << wavHeader.fmt[2] << wavHeader.fmt[3] << endl;
-  cout << "Number of bytes per second :" << wavHeader.bytesPerSec << endl;
-  */
 }
 
 void TekstHeliks::executeCB(const synthts_et_ros::lausu_fraasGoalConstPtr &goal)

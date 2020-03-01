@@ -255,11 +255,9 @@ target_link_libraries(tekst_heliks
 )
 
 add_executable(tekst_heliks_klient src/tekst_heliks_klient.cpp)
-add_dependencies(
-  tekst_heliks_klient
+add_dependencies( tekst_heliks_klient
   ${synthts_et_ros_EXPORTED_TARGETS}
 )
-target_link_libraries(
-  tekst_heliks_klient
+target_link_libraries(tekst_heliks_klient
   ${catkin_LIBRARIES}
 )

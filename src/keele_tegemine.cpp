@@ -119,7 +119,8 @@ bool KeeleTegemine::genereeri_lause(std::string lause) {
     ROS_INFO("Genereeri lause is called");
     std::string narrow_string(lause);
     std::wstring wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
-    const wchar_t* text = wide_string.c_str();
+    const wchar_t* tekst = wide_string.c_str();
+    CFSWString text = tekst;
     text = DealWithText(text);
     CFSArray<CFSWString> res = do_utterances(text);
 

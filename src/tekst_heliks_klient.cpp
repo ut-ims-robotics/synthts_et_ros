@@ -18,7 +18,7 @@ int main (int argc, char **argv)
   ROS_INFO("Action server started, sending goal.");
   // send a goal to the action
   synthts_et_ros::lausu_fraasGoal goal;
-  goal.fraas = "Seda miks mälestusmärk pidi olema just ratsamonument põhjendati ühest küljest asjaoluga et Mannerheim oli ratsaväelane tervist";
+  goal.fraas = "Marssal Mannerheimi ratsamonument (soome keeles Marsalkka Mannerheimin ratsastajapatsas) on Soome presidendi marssal Carl Gustaf Emil Mannerheimi ratsamonument Helsingi kesklinnas. Kuju autor on skulptor Aimo Tukiainen. Monument avati Mannerheimi sünniaastapäeval 4. juunil 1960. Seda, miks mälestusmärk pidi olema just ratsamonument, põhjendati ühest küljest asjaoluga, et Mannerheim oli ratsaväelane. Teisest küljest on traditsiooniliselt riigimehi ja väepealikuid hobuse seljas kujutatud, Soomes aga polnud veel ühtki ratsamonumenti. ";
   ac.sendGoal(goal);
 
   //wait for the action to return
