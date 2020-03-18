@@ -228,28 +228,13 @@ file (GLOB CPP_FILES
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-#add_executable(eestikeelne_lause 
-#  src/eestikeelne_lause.cpp
-#  src/keele_tegemine.cpp
-#  ${CPP_FILES}
-#)
-#target_link_libraries(eestikeelne_lause 
-#  ${catkin_LIBRARIES}
-#  dl
-#)
-#add_dependencies(eestikeelne_lause test_generate_messages_cpp)
-
-#add_executable(kuulaja src/kuulaja.cpp)
-#target_link_libraries(kuulaja ${catkin_LIBRARIES})
-#add_dependencies(kuulaja test_generate_messages_cpp)
-
-add_executable(tekst_heliks 
-  src/tekst_heliks.cpp
+add_executable(tekst_heliks_server 
+  src/tekst_heliks_server.cpp
   src/keele_tegemine.cpp
   ${CPP_FILES}
 )
-add_dependencies(tekst_heliks ${synthts_et_ros_EXPORTED_TARGETS})
-target_link_libraries(tekst_heliks 
+add_dependencies(tekst_heliks_server ${synthts_et_ros_EXPORTED_TARGETS})
+target_link_libraries(tekst_heliks_server 
   ${catkin_LIBRARIES}
   dl
 )

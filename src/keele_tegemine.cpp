@@ -116,7 +116,6 @@ void KeeleTegemine::init() {
 }
 
 bool KeeleTegemine::genereeri_lause(std::string lause) {
-    ROS_INFO("Genereeri lause is called");
     std::string narrow_string(lause);
     std::wstring wide_string = std::wstring(narrow_string.begin(), narrow_string.end());
     const wchar_t* tekst = wide_string.c_str();
@@ -129,9 +128,7 @@ bool KeeleTegemine::genereeri_lause(std::string lause) {
     if (write_durlabel_) durfp_ = fopen(dur_fname_, "w");
     if (!write_raw_) HTS_Engine_write_header(&engine_, outfp_, 1);
 
-    ROS_INFO("Starting to create wav file");
     for (INTPTR i = 0; i < res.GetSize(); i++) {
-        ROS_INFO("in loop");
         CFSArray<CFSWString> label = do_all(res[i], print_label_, print_utt_);
 
         std::vector<std::string> v;
@@ -155,11 +152,6 @@ bool KeeleTegemine::genereeri_lause(std::string lause) {
         HTS_Engine_refresh(&engine_);
 
     } //synth loop
-    ROS_INFO("Synth loop is finished");
-
-    //std::cout << data_size << std::endl;
-    //std::cout << engine_.condition.sampling_frequency * sizeof(short) << std::endl;
-    //std::cout << ceil(data_size / (engine_.condition.sampling_frequency * sizeof(short) *1.0)) << std::endl;
 
     if (!write_raw_) HTS_Engine_write_header(&engine_, outfp_, 0);
     if (write_durlabel_) fclose(durfp_);
