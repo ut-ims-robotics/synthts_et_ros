@@ -2,7 +2,7 @@
 
 <launch>
 
-  <node pkg="synthts_et_ros" type="tekst_heliks" name="tekst_heliks" output="screen">
+  <node pkg="synthts_et_ros" type="tekst_heliks_server" name="tekst_heliks_server" output="screen">
     
   </node>
   <rosparam file="$(find synthts_et_ros)/config/parameetrid.yaml" command="load"/>

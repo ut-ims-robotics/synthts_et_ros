@@ -14,6 +14,7 @@ class TekstHeliks
     // create messages that are used to published feedback/result
     synthts_et_ros::lausu_fraasFeedback feedback_;
     synthts_et_ros::lausu_fraasResult result_;
+    
     char *voices_fn_helper;
     string lex_file_name_;
     string lexd_file_name_;
