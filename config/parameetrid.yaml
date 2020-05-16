@@ -1,7 +1,6 @@
 lex_file_name: "/home/academy/catkin_ws/src/synthts_et_ros/synthts_et/synthts_et/dct/et.dct"
 lexd_file_name: "/home/academy/catkin_ws/src/synthts_et_ros/synthts_et/synthts_et/dct/et3.dct"
 fn_voices: "/home/academy/catkin_ws/src/synthts_et_ros/synthts_et/synthts_et/htsvoices/eki_et_tnu.htsvoice"
-output_fname: "/home/academy/.tekstHeliks/out_tnu.wav"
 dur_fname: ""
 speed: 1.1
 half_tone: 2.0

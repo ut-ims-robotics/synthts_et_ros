@@ -43,6 +43,17 @@ TekstHeliks::TekstHeliks(std::string name) :
 {
   as_.start();
   getParams();
+  //get WAV file location
+  string home_location = "/home/";
+  char *home = &home_location[0];
+  char *user = getenv("USER");
+  string wav_location = "/.tekstHeliks/out.wav";
+  char *wav = &wav_location[0];
+  char * path = (char *) malloc(2 + strlen(home)+ strlen(user) + strlen(wav));
+  strcpy(path, home);
+  strcat(path, user);
+  strcat(path, wav);
+  output_fname_ = path;
   kt_.set_params(
         lexFileName_, lexDFileName_, fn_voices_, output_fname_, dur_fname_,
         speed_, half_tone_, gv_weight1_, gv_weight2_,
