@@ -93,7 +93,13 @@ void TekstHeliks::executeCB(const synthts_et_ros::lausu_fraasGoalConstPtr &goal)
     // set the action state to succeeded
     as_.setSucceeded(result_);
   }
-  //is if(!success) also needed
+  else
+  {
+    result_.edukas = false;
+    ROS_INFO("%s: Failed", action_name_.c_str());
+    as_.setSucceeded(result_);
+  }
+  
 }
 
 void TekstHeliks::getParams()

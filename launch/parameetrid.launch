@@ -5,5 +5,6 @@
   <node pkg="synthts_et_ros" type="tekst_heliks_server" name="tekst_heliks_server" output="screen">
     
   </node>
+  <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
   <rosparam file="$(find synthts_et_ros)/config/parameetrid.yaml" command="load"/>
 </launch>
