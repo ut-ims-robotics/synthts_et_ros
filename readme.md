@@ -1,5 +1,7 @@
 # **ROS wrapper for synths_et**
 ### Installimine:
+sound_play on vaja eelnevalt installida
+
 valida kaust, kuhu projekt alla tõmmata
 
 tekitada kausta src kaust
@@ -23,10 +25,10 @@ jooksutada `catkin_make`
 
 ### Kasutamine:
 
-projekti kaustas jooksutada server:
+projekti kaustas jooksutada server vastavalt soovitavale häälele (kasutada eva.launch või tnu.launch):
 ```
 source devel/setup.bash
-roslaunch synthts_et_ros parameetrid.launch
+roslaunch synthts_et_ros tnu.launch
 ```
 uues terminalis liikuda projekti kausta ja jooksutada klient:
 ```

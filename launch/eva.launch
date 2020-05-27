@@ -6,5 +6,5 @@
     
   </node>
   <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
-  <rosparam file="$(find synthts_et_ros)/config/parameetrid.yaml" command="load"/>
+  <rosparam file="$(find synthts_et_ros)/config/eva.yaml" command="load"/>
 </launch>

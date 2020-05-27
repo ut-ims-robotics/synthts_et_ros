@@ -1,0 +1,12 @@
+lex_file_name: "/home/kasutaja/catkin_ws/src/synthts_et_ros/synthts_et/synthts_et/dct/et.dct"
+lexd_file_name: "/home/kasutaja/catkin_ws/src/synthts_et_ros/synthts_et/synthts_et/dct/et3.dct"
+fn_voices: "/home/kasutaja/catkin_ws/src/synthts_et_ros/synthts_et/synthts_et/htsvoices/eki_et_tnu.htsvoice"
+dur_fname: ""
+speed: 1.1
+half_tone: 2.0
+gv_weight1: 1.0
+gv_weight2: 1.2
+print_label: false
+print_utt: false
+write_raw: false
+write_durlabel: false

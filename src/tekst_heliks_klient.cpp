@@ -18,7 +18,12 @@ int main (int argc, char **argv)
   ROS_INFO("Action server started, sending goal.");
   // send a goal to the action
   synthts_et_ros::lausu_fraasGoal goal;
-  goal.fraas = "Tervist! Kuidas läheb?";
+  if(argc==1){
+    goal.fraas = "Tervist! Kuidas läheb?";
+  }
+  else{
+    goal.fraas = argv[1];
+  }
   ac.sendGoal(goal);
 
   //wait for the action to return

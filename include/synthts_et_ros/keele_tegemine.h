@@ -44,11 +44,11 @@ class KeeleTegemine
     double speed_;
     static const size_t fr_ = 48000;
     static const size_t fp_ = 240;
-    static const float alpha_ = 0.55;
+    static constexpr float alpha_ = 0.55;
     float ht_;
     float gvw1_;
     float gvw2_;
 
-    static const float beta_ = 0.0;
-    static const float th_ = 0.5;
+    static constexpr float beta_ = 0.0;
+    static constexpr float th_ = 0.5;
 };
